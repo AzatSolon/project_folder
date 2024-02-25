@@ -1,0 +1,14 @@
+[tool.poetry]
+name = "poject-folder"
+version = "0.1"
+description = "\"Помощник в поиске анализе фильтрации и сравнее ваканский с hh.ru\""
+authors = ["Yamete Kudasai <ssh-ed25519 AAAAC3NzaC1lZDI1NTE5AAAAIHz9UP48vsX5QHtRbnWSJfttNWrsUcnSHPgtuXt7kPlq your_email@example.com -ssh>"]
+readme = "README.md"
+
+[tool.poetry.dependencies]
+python = "3.12"
+
+
+[build-system]
+requires = ["poetry-core"]
+build-backend = "poetry.core.masonry.api"
