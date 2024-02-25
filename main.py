@@ -10,17 +10,16 @@ def main():
         if users_salary.isdigit():
             break
         else:
-            print("\nВведите количество вакансий для вывода в топ N или 'Enter...\n")
+            print("\nВведите зарплату цифрами. Пример: 100000\n")
 
     user = UserInteraction(user_input)
     user.sorted_salary(user.all_vacancy, int(users_salary))
     user.get_top_vacancies(user.sort_salary)
-
     user.make_info(user.top_salary)
 
     while True:
         number_vacancy = input("Введите номер строки\n"
-                               "Чтобы открыть более подробную инфомацию: ")
+                               "Чтобы открыть более подробную инфомацию по вакансиям : ")
         if number_vacancy.isdigit():
             break
 
