@@ -39,7 +39,6 @@ class UserInteraction(CompareVacancies):
         """
         Выводит информацию о топе вакансий
         """
-        print()
         info = []
         for params_vacancy in top_salary[int(number_of_vacancies)]:
             for key, val in params_vacancy.items():

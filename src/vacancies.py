@@ -12,8 +12,7 @@ class CompareVacancies(GetVacancies):
 
     def sorted_salary(self, list_all: list, salary: int) -> dict:
         """
-           Generate dict with necessary salary
-           with vacancies' list
+           Генерируйт словарь с необходимой зарплатой и списком вакансий
         """
 
         for vacancy in list_all:
