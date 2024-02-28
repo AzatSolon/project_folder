@@ -16,6 +16,7 @@ def main():
         user.sorted_salary(user.all_vacancy, int(users_salary))
         user.get_top_vacancies(user.sort_salary)
         user.make_info(user.top_salary)
+        user.save_info()
 
         number_vacancy = input("Введите номер строки\n"
                                "Чтобы открыть более подробную инфомацию по вакансиям : ")

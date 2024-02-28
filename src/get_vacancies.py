@@ -36,6 +36,6 @@ class GetVacancies(AbstractHh):
         if len(self.all_vacancy) == 0:
             print('Вакансия не найдена\nПопробуйте снова')
         else:
-            with open('sample.json', 'w', encoding='utf-8') as file:
+            with open('folder.json', 'w', encoding='utf-8') as file:
                 file.write(json.dumps(self.all_vacancy, ensure_ascii=False))
             return self.all_vacancy
