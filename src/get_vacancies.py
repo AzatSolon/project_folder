@@ -14,6 +14,14 @@ class GetVacancies(AbstractHh):
     def __init__(self, name_vacancy: str):
         self.name_vacancy: str = name_vacancy
         self.all_vacancy = self.get_vacancy_from_api()
+        self.vacancy = self.save_info()[0]['name']
+        self.url = self.save_info()[0]['url']
+        self.area = self.save_info()[0]['area']['name']
+        self.salary = self.save_info()[0]['salary']
+        self.data = self.vacancy, self.url, self.area, self.salary
+
+    def __str__(self):
+        return f"{self.data}"
 
     def __repr__(self):
         return f"{self.all_vacancy}"
@@ -39,3 +47,6 @@ class GetVacancies(AbstractHh):
             with open('folder.json', 'w', encoding='utf-8') as file:
                 file.write(json.dumps(self.all_vacancy, ensure_ascii=False))
             return self.all_vacancy
+
+
+#print(GetVacancies("python").__str__())
