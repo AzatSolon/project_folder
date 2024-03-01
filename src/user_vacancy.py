@@ -1,4 +1,3 @@
-from collections import defaultdict
 from src.vacancies import CompareVacancies
 
 
@@ -6,7 +5,6 @@ class UserInteraction(CompareVacancies):
     def __init__(self, name_vacancy):
         super().__init__(name_vacancy)
         self.get_vacancy_from_api()
-        self.vacancies_list = defaultdict(list)
         self.message = "Error"
 
     def __str__(self):
@@ -18,28 +16,30 @@ class UserInteraction(CompareVacancies):
         """
         заполняет список вакансиями по запросу пользователя
         """
-        print("Зп от большего к меньшему:")
-
+        print("Сортировка по з/п:")
         count = 1
-        for top, vacancies in top_salary.items():
-
-            print(f"{count}. Зарплата: {top} - число вакансий {len(vacancies)}", end='\n')
-
-            for value in vacancies:
-                self.vacancies_list[count].extend([{"Вакансия": value['name']},
-                                                   {"Зп от": value['salary']['from']},
-                                                   {"Зп до": value['salary']['to']},
-                                                   {"Город": value['area']['name']},
-                                                   {"URL": f"{value['alternate_url']}\n"}])
+        for item in top_salary:
+            print(f"{count}. Зарплата:{item['salary_from']}", end='\n')
+            self.vacancies_list.extend([{"Вакансия": item['title']},
+                                        {"Зп от": item['salary_from']},
+                                        {"Зп до": item['salary_to']},
+                                        {"Город": item['area']},
+                                        {"URL": item['url']}])
             count += 1
+        return self.vacancies_list
 
     @staticmethod
-    def last_info(top_salary: dict, number_of_vacancies: int):
+    def last_info(top_salary: dict):
         """
         Выводит информацию о топе вакансий
         """
         info = []
-        for params_vacancy in top_salary[int(number_of_vacancies)]:
-            for key, val in params_vacancy.items():
-                info.append("{0}: {1}".format(key, val))
+        for params_vacancy in top_salary:
+            if params_vacancy["salary_from"] is not None and params_vacancy["salary_to"] is not None:
+                info.append("Вакансия: {0} зарплата от: {1}, зарплата до:{2}. Город: {3}, url:{4}".format(
+                    params_vacancy['title'],
+                    params_vacancy['salary_from'],
+                    params_vacancy['salary_to'],
+                    params_vacancy['area'],
+                    params_vacancy['url']))
         return '\n'.join(info)

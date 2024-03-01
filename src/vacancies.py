@@ -1,40 +1,44 @@
 from typing import Any
+import json
 
 from src.get_vacancies import GetVacancies
-from collections import defaultdict
 
 
 class CompareVacancies(GetVacancies):
     def __init__(self, name_vacancy: str):
         super().__init__(name_vacancy)
-        self.sort_salary: dict = defaultdict(list)
-        self.top_salary: dict = defaultdict(list)
+        self.sort_salary = []
+        self.top_salary = []
 
-    def sorted_salary(self, list_all: list, salary: int) -> dict:
+    def sorted_salary(self, salary: int) -> list[Any]:
         """
            Генерируйт словарь с необходимой зарплатой и списком вакансий
         """
 
-        for vacancy in list_all:
-            if vacancy["salary"] is not None and vacancy["salary"]["from"] is not None:
-                if vacancy["salary"]['from'] >= salary and vacancy["salary"]['from'] is not None:
-                    self.sort_salary[vacancy["salary"]['from']].append(vacancy)
+        for vacancy in self.vacancies_list:
+            if vacancy["salary_from"] is not None and vacancy["salary_to"] is not None:
+                if vacancy["salary_from"] >= int(salary):
+                    self.sort_salary.append(vacancy)
         return self.sort_salary
 
-    def get_top_vacancies(self, sort_salary) -> str | dict[Any, Any]:
+    def get_top_vacancies(self) -> str | list[Any]:
         """
         Возвращает список топ вакансий по зп от max k min
         """
 
-        for top, vacancy in sort_salary.items():
-            for value in vacancy:
-                if value["salary"] is not None and value["salary"]["to"] is not None:
-                    self.top_salary[value["salary"]["to"]].extend(vacancy)
+        for vacancy in self.sort_salary:
+            if vacancy["salary_from"] is not None and vacancy["salary_to"] is not None:
+                self.top_salary.append(vacancy)
 
-        self.top_salary = dict(sorted(self.top_salary.items(), reverse=True))
-
-        if len(self.top_salary) < 1:
+        if int(len(self.top_salary)) < 1:
             message = "Vacancy not found"
             return message
+        else:
+            return self.top_salary
 
-        return self.top_salary
+    def save_request(self):
+        if len(self.top_salary) == 0:
+            print('Вакансия не найдена\nПопробуйте снова')
+        else:
+            with open('user_request.json', 'w', encoding='utf-8') as file:
+                return file.write(json.dumps(self.top_salary, indent=2, ensure_ascii=False))
