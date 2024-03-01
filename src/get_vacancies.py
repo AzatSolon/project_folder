@@ -14,14 +14,10 @@ class GetVacancies(AbstractHh):
     def __init__(self, name_vacancy: str):
         self.name_vacancy: str = name_vacancy
         self.all_vacancy = self.get_vacancy_from_api()
-        self.vacancy = self.save_info()[0]['name']
-        self.url = self.save_info()[0]['url']
-        self.area = self.save_info()[0]['area']['name']
-        self.salary = self.save_info()[0]['salary']
-        self.data = self.vacancy, self.url, self.area, self.salary
+        self.vacancies_list = self.get_format_vacancies()
 
     def __str__(self):
-        return f"{self.data}"
+        return f""
 
     def __repr__(self):
         return f"{self.all_vacancy}"
@@ -41,12 +37,22 @@ class GetVacancies(AbstractHh):
     def save_info(self) -> str or list:
         """Создает и заполняпет json фаил вакансиями"""
 
-        if len(self.all_vacancy) == 0:
+        if len(self.vacancies_list) == 0:
             print('Вакансия не найдена\nПопробуйте снова')
         else:
             with open('folder.json', 'w', encoding='utf-8') as file:
-                file.write(json.dumps(self.all_vacancy, ensure_ascii=False))
-            return self.all_vacancy
+                file.write(json.dumps(self.vacancies_list, indent=2, ensure_ascii=False))
+            return self.vacancies_list
 
-
-#print(GetVacancies("python").__str__())
+    def get_format_vacancies(self):
+        formatted_vacancies = []
+        for vacancy in self.all_vacancy:
+            formatted_vacancy = {
+                "title": vacancy["name"],
+                "url": vacancy["url"],
+                "salary_from": vacancy["salary"]["from"] if vacancy["salary"] else None,
+                "salary_to": vacancy["salary"]["to"] if vacancy["salary"] else None,
+                "area": vacancy["area"]["name"]
+            }
+            formatted_vacancies.append(formatted_vacancy)
+        return formatted_vacancies
