@@ -2,6 +2,7 @@ from typing import Any
 import json
 
 from src.get_vacancies import GetVacancies
+from src.vacancy import Vacancy
 
 
 class CompareVacancies(GetVacancies):
@@ -10,15 +11,12 @@ class CompareVacancies(GetVacancies):
         self.sort_salary = []
         self.top_salary = []
 
-    def sorted_salary(self, salary: int) -> list[Any]:
+    def sorted_salary(self):
         """
-           Генерируйт словарь с необходимой зарплатой и списком вакансий
+           Генерируйт словарь со списком экземпляров класса вакансий
         """
-
-        for vacancy in self.vacancies_list:
-            if vacancy["salary_from"] is not None and vacancy["salary_to"] is not None:
-                if vacancy["salary_from"] >= int(salary):
-                    self.sort_salary.append(vacancy)
+        self.sort_salary = [Vacancy(**x) for x in self.top_salary]
+        self.sort_salary.sort()
         return self.sort_salary
 
     def get_top_vacancies(self) -> str | list[Any]:
@@ -26,7 +24,7 @@ class CompareVacancies(GetVacancies):
         Возвращает список топ вакансий по зп от max k min
         """
 
-        for vacancy in self.sort_salary:
+        for vacancy in self.vacancies_list:
             if vacancy["salary_from"] is not None and vacancy["salary_to"] is not None:
                 self.top_salary.append(vacancy)
 

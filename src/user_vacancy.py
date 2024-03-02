@@ -19,12 +19,7 @@ class UserInteraction(CompareVacancies):
         print("Сортировка по з/п:")
         count = 1
         for item in top_salary:
-            print(f"{count}. Зарплата:{item['salary_from']}", end='\n')
-            self.vacancies_list.extend([{"Вакансия": item['title']},
-                                        {"Зп от": item['salary_from']},
-                                        {"Зп до": item['salary_to']},
-                                        {"Город": item['area']},
-                                        {"URL": item['url']}])
+            print(f"{count}, {item}")
             count += 1
         return self.vacancies_list
 

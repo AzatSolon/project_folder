@@ -14,9 +14,10 @@ def main():
                 break
             else:
                 print("\nВведите зарплату цифрами. Пример: 100000\n")
-        user.sorted_salary(int(users_salary))
         user.get_top_vacancies()
-        user.make_info(user.top_salary)
+        user.sorted_salary()
+        #user.get_top_vacancies()
+        user.make_info(user.sort_salary)
 
         number_vacancy = input("Введите номер строки\n"
                                "Чтобы открыть более подробную инфомацию по вакансиям : ")
