@@ -8,10 +8,7 @@ class Vacancy:
         self.area = area
 
     def __str__(self):
-        return f"Вакансия: {self.title}\n" \
-               f"Зарплата: от {self.salary_from} до {self.salary_to}\n" \
-               f"Ссылка: {self.url}\n" \
-               f"Город: {self.area}."
+        return f"{self.title}\n{self.salary_from} {self.salary_to}\n{self.url}\n{self.area}."
 
     def __ge__(self, other):
         if self.salary_from and other.salary_from is not None:

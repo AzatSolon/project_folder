@@ -1,31 +1,30 @@
-from src.user_vacancy import UserInteraction
+from src.Json_saver import JsonSaver
+from src.vacancies import CompareVacancies
 
 
 def main():
     print('Платформа поиска = "HeadHunter"')
     user_input = input("Введите вакансию для поиска: ")
-    user = UserInteraction(user_input)
-    user.save_info()
+    vacancies = CompareVacancies(user_input)
+    json_connector = JsonSaver()
+    json_vacancy = json_connector.save(vacancies.vacancy_list)
 
-    if len(user.vacancies_list) != 0:
+    if len(json_vacancy) != 0:
+        users_salary = input("Минимальное значение зп: ")
         while True:
-            users_salary = input("Минимальное значение зп: ")
             if users_salary.isdigit():
                 break
             else:
-                print("\nВведите зарплату цифрами. Пример: 100000\n")
-        user.sorted_salary(int(users_salary))
-        user.get_top_vacancies()
-        user.make_info(user.top_salary)
+                print("Введите зарплату цифрами. Пример: 100000\n")
 
-        number_vacancy = input("Введите номер строки\n"
-                               "Чтобы открыть более подробную инфомацию по вакансиям : ")
-        if int(number_vacancy) <= len(user.get_top_vacancies()) and int(number_vacancy) != 0:
-            print(user.last_info(user.top_salary))
-            user.save_request()
-
+        vacancies_top_list = vacancies.sorted_salary(json_vacancy, users_salary)
+        print(f"Найдено: {len(vacancies_top_list)} вакансий.")
+        print(vacancies.last_info(vacancies_top_list))
+        users_save = input("Хотите сохранить результат поиска в json фаил: да/нет?\n")
+        if "да" in users_save.lower():
+            vacancies.save_request()
         else:
-            print("Error: Неверный выбор строки")
+            print("Досвидания, приходите еще ...")
 
     else:
         print("Error: Ненайдено такой вакансии")
