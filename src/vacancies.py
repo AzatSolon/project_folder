@@ -1,40 +1,29 @@
-from typing import Any
+from abc import ABC
 import json
 
 from src.get_vacancies import GetVacancies
-from src.vacancy import Vacancy
 
 
-class CompareVacancies(GetVacancies):
+class CompareVacancies(GetVacancies, ABC):
     def __init__(self, name_vacancy: str):
         super().__init__(name_vacancy)
-        self.sort_salary = []
+        self.all_vacancy = self.get_vacancy_from_api()
         self.top_salary = []
 
-    def sorted_salary(self):
+    def sorted_salary(self, data, salary):
         """
            Генерируйт словарь со списком экземпляров класса вакансий
         """
-        self.sort_salary = [Vacancy(**x) for x in self.top_salary]
-        self.sort_salary.sort()
-        return self.sort_salary
-
-    def get_top_vacancies(self) -> str | list[Any]:
-        """
-        Возвращает список топ вакансий по зп от max k min
-        """
-
-        for vacancy in self.vacancies_list:
-            if vacancy["salary_from"] is not None and vacancy["salary_to"] is not None:
-                self.top_salary.append(vacancy)
-
-        if int(len(self.top_salary)) < 1:
-            message = "Vacancy not found"
-            return message
-        else:
-            return self.top_salary
+        for vacancy in data:
+            if vacancy['salary_from'] and vacancy['salary_to'] is not None:
+                if vacancy['salary_from'] >= int(salary):
+                    self.top_salary.append(vacancy)
+        return sorted(self.top_salary, key=lambda x: x['salary_from'], reverse=True)
 
     def save_request(self):
+        """
+        Записывает результат поиска по вакансии и зп в фаил json
+        """
         if len(self.top_salary) == 0:
             print('Вакансия не найдена\nПопробуйте снова')
         else:
